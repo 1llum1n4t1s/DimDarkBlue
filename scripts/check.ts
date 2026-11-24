@@ -2,7 +2,7 @@
 // 色キーの許可一覧は Chromium chrome/browser/themes/browser_theme_pack.cc の
 // kOverwritableColorTable（無効なキーは Chrome が無言で無視するため、ここで弾く）。
 // button_background は有効なキーだが、Windows の右上の3ボタンの背景に重なって枠と色がずれるため許可しない。
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 
 const ALLOWED_COLORS = new Set([
@@ -39,10 +39,13 @@ const root = dirname(manifestPath);
 const m = JSON.parse(readFileSync(manifestPath, "utf8"));
 
 if (m.manifest_version !== 3) errors.push("manifest_version は 3");
-if (!m.name || typeof m.description !== "string") errors.push("name / description が必要");
-else if (m.description.length > 132) errors.push(`description が ${m.description.length} 文字 (上限132)`);
-if (/__MSG_/.test(JSON.stringify(m))) errors.push("__MSG_ は使わない");
-if (/twitter|\bx\b/i.test(m.description ?? "")) errors.push("description に商標語");
+if (!m.name || /__MSG_/.test(m.name)) errors.push("name は直書き");
+if (m.description !== "__MSG_appDescription__" || m.default_locale !== "en") errors.push("description は __MSG_appDescription__、default_locale は en");
+for (const l of readdirSync(join(root, "_locales"))) {
+  const d: string = JSON.parse(readFileSync(join(root, "_locales", l, "messages.json"), "utf8")).appDescription?.message ?? "";
+  if (!d || d.length > 132) errors.push(`${l} の appDescription が ${d.length} 文字 (1〜132)`);
+  if (/twitter|\bx\b/i.test(d)) errors.push(`${l} の appDescription に商標語`);
+}
 for (const k of ["permissions", "host_permissions", "content_scripts", "background", "action"])
   if (k in m) errors.push(`${k} は入れない`);
 

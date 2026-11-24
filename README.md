@@ -48,7 +48,7 @@ Bun が必要です。依存パッケージはありません。
 
 ```
 bun --no-env-file scripts/check.ts   # manifest・色キー・コントラスト・アイコン実寸の検査
-bun --no-env-file scripts/pack.ts    # DimDarkBlue.zip（manifest.json・icons・LICENSE のみ）を作成
+bun --no-env-file scripts/pack.ts    # DimDarkBlue.zip（manifest.json・_locales・icons・LICENSE のみ）を作成
 ```
 
 ## ストア掲載画像

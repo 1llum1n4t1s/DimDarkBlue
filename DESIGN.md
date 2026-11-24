@@ -9,6 +9,7 @@ Chrome のブラウザ UI（タブ、ツールバー、アドレスバー、新�
 | 要素 | 責務 |
 |---|---|
 | `manifest.json` | 配布物の本体。Manifest V3 のテーマで、`theme.colors` が配色の正本 |
+| `_locales/` | 概要の日英文言（名前は manifest に直書き） |
 | `icons/` | 16・48・128px のアイコン |
 | `scripts/check.ts` | manifest とアイコンの検査（読み取りのみ） |
 | `scripts/pack.ts` | ストア提出用 `DimDarkBlue.zip` の作成 |
@@ -21,7 +22,7 @@ Chrome のブラウザ UI（タブ、ツールバー、アドレスバー、新�
 
 - 実行時: Chrome が `theme.colors` を読み、UI の色に反映する。このテーマ自身のコードは動かない。
 - 検査: `check.ts` が manifest の項目、色キー、RGB、コントラスト比、アイコンの実寸を調べ、問題があれば終了コード 1 で終わる。
-- 配布: `pack.ts` が manifest・LICENSE・`icons/` を ZIP にまとめる。検査は呼ばないため、別に実行する。
+- 配布: `pack.ts` が manifest・LICENSE・`_locales/`・`icons/` を ZIP にまとめる。検査は呼ばないため、別に実行する。
 - 掲載画像: `screenshots.ts` がテーマのコピーを一時プロファイルの Chrome に CDP で読み込み、その窓だけを撮って `store/images/` へ書き出す。操作と制約の詳細は [AGENTS.md](AGENTS.md) を参照。
 
 ## 不変条件
@@ -30,7 +31,7 @@ Chrome のブラウザ UI（タブ、ツールバー、アドレスバー、新�
 - 色キーは Chromium の `kOverwritableColorTable` にあるものに限る。
 - `toolbar` は `frame` と同色にし、`button_background` は使わない（後者は `check.ts` が拒否する）。
 - 検査対象の文字色と背景色の組は、コントラスト比 4.5 以上を保つ。
-- 配布 ZIP の中身は manifest・LICENSE・`icons/` だけとする。
+- 配布 ZIP の中身は manifest・LICENSE・`_locales/`・`icons/` だけとする。
 - 掲載スクリーンショットは 1280x800、小タイルは 440x280 とする。
 - README の配色表は `manifest.json` と一致させる。
 

@@ -443,6 +443,10 @@ const work = mkdtempSync(join(tmpdir(), "ddb-shot-"));
 const extDir = join(work, "ext"), profDir = join(work, "profile");
 mkdirSync(join(extDir, "icons"), { recursive: true }); mkdirSync(profDir, { recursive: true }); mkdirSync(outDir, { recursive: true });
 copyFileSync(join(root, "manifest.json"), join(extDir, "manifest.json"));
+for (const l of readdirSync(join(root, "_locales"))) {
+  mkdirSync(join(extDir, "_locales", l), { recursive: true });
+  copyFileSync(join(root, "_locales", l, "messages.json"), join(extDir, "_locales", l, "messages.json"));
+}
 for (const f of readdirSync(join(root, "icons"))) copyFileSync(join(root, "icons", f), join(extDir, "icons", f));
 console.log(`一時フォルダー: ${work}`);
 

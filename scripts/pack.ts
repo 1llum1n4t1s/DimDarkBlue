@@ -1,4 +1,4 @@
-// ストア提出用 ZIP を作る。依存ゼロ。manifest.json・icons/・LICENSE だけを入れる。
+// ストア提出用 ZIP を作る。依存ゼロ。manifest.json・_locales/・icons/・LICENSE だけを入れる。
 // 使い方: bun --no-env-file scripts/pack.ts  → リポジトリ直下に DimDarkBlue.zip
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -7,7 +7,7 @@ import { deflateRawSync } from "node:zlib";
 const root = join(import.meta.dir, "..");
 const out = join(root, "DimDarkBlue.zip");
 
-const names = ["manifest.json", "LICENSE", ...readdirSync(join(root, "icons")).sort().map((f) => `icons/${f}`)];
+const names = ["manifest.json", "LICENSE", ...readdirSync(join(root, "_locales")).sort().map((l) => `_locales/${l}/messages.json`), ...readdirSync(join(root, "icons")).sort().map((f) => `icons/${f}`)];
 
 const parts: Buffer[] = [];
 const central: Buffer[] = [];
