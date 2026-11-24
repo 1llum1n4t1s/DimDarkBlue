@@ -3,7 +3,7 @@
 - 配色の正本は `manifest.json` の `theme.colors`。色キーは Chromium `chrome/browser/themes/browser_theme_pack.cc` の `kOverwritableColorTable` にあるものだけ（無効キーは Chrome が無言で無視する）。配色表は README.md にも書いているので、変更時は両方を揃える。
 - `toolbar` は `frame` と同色にする（Brave のピン留めタブの枠線は `frame` と `toolbar` の明るさから自動で決まり、同色のとき暗くなる）。
 - `button_background` は使わない（Windows の右上の3ボタンの背景に重なり、枠 `frame` と色がずれる）。
-- 検証: `bun --no-env-file scripts/check.ts`（許可キー・RGB 範囲・文字コントラスト 4.5 以上・アイコン実寸）。
+- 検証: `bun --no-env-file scripts/check.ts`（概要文言・許可キー・RGB 範囲・文字コントラスト 4.5 以上・アイコン実寸）。
 - パッケージ: `bun --no-env-file scripts/pack.ts` で `DimDarkBlue.zip`（manifest.json・_locales・icons・LICENSE のみ）。名前は manifest に直書き、概要は `_locales/{en,ja}` に置く（ストアの掲載情報を日英に分けるため）。ZIP は git に入れない。
 - 版（`manifest.json` の `version`）は通常作業で上げない。上げるのは `/vava` の依頼時だけ。
 - ストア用 CI は未導入（CWS の item ID が未取得）。掲載文の下書きは `store/`。掲載画像は `store/images/`（`en/` と `ja/` に `screenshot-01〜03.png`＝1280x800・アルファなし、言語共通の `tile-small.png`＝440x280）。

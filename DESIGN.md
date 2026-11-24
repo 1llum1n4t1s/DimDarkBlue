@@ -11,7 +11,7 @@ Chrome のブラウザ UI（タブ、ツールバー、アドレスバー、新�
 | `manifest.json` | 配布物の本体。Manifest V3 のテーマで、`theme.colors` が配色の正本 |
 | `_locales/` | 概要の日英文言（名前は manifest に直書き） |
 | `icons/` | 16・48・128px のアイコン |
-| `scripts/check.ts` | manifest とアイコンの検査（読み取りのみ） |
+| `scripts/check.ts` | manifest・概要文言・アイコンの検査（読み取りのみ） |
 | `scripts/pack.ts` | ストア提出用 `DimDarkBlue.zip` の作成 |
 | `scripts/screenshots.ts` | 掲載画像の撮影と検査（Windows 専用） |
 | `store/` | ストア掲載文の下書きと掲載画像。ZIP には入らない |
@@ -21,7 +21,7 @@ Chrome のブラウザ UI（タブ、ツールバー、アドレスバー、新�
 ## データの流れ
 
 - 実行時: Chrome が `theme.colors` を読み、UI の色に反映する。このテーマ自身のコードは動かない。
-- 検査: `check.ts` が manifest の項目、色キー、RGB、コントラスト比、アイコンの実寸を調べ、問題があれば終了コード 1 で終わる。
+- 検査: `check.ts` が manifest の項目、概要文言、色キー、RGB、コントラスト比、アイコンの実寸を調べ、問題があれば終了コード 1 で終わる。
 - 配布: `pack.ts` が manifest・LICENSE・`_locales/`・`icons/` を ZIP にまとめる。検査は呼ばないため、別に実行する。
 - 掲載画像: `screenshots.ts` がテーマのコピーを一時プロファイルの Chrome に CDP で読み込み、その窓だけを撮って `store/images/` へ書き出す。操作と制約の詳細は [AGENTS.md](AGENTS.md) を参照。
 
@@ -45,5 +45,6 @@ Chrome のブラウザ UI（タブ、ツールバー、アドレスバー、新�
 | 許可キーの一覧を `check.ts` に持つ | Chrome は無効なキーを無言で無視する | Chromium 側の変更に手で追従する |
 | ZIP を自前で書き、日時を固定する | 依存を持たず、出力を再現しやすくする | ZIP 形式の処理を保守する |
 | 実際の Chrome の窓を撮る | テーマ適用後の見た目を正確に載せる | Windows と Chrome が要り、Chrome の変更の影響を受ける |
+| 概要だけを `_locales/` に分ける | ストアの掲載情報を日英に分ける。名前は共通 | 両言語の文言を保守する |
 | 言語ごとに別の一時プロファイルで撮る | 普段の Chrome に触れず、UI の言語を分ける | 一時フォルダーの片付けが要る |
 | シークレットの画像を載せない | Chrome 158 の unpacked 読み込みでは、シークレット窓にテーマが適用されなかった | 指定済みのシークレット用の色は掲載画像で示せない |
