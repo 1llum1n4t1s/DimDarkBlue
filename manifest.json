@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Dim Dark Blue",
+  "version": "1.0.0",
+  "description": "A calm dark navy blue theme for Chrome with soft, low-glare contrast. Easy on the eyes for late-night browsing.",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "theme": {
+    "colors": {
+      "frame": [21, 32, 43],
+      "frame_inactive": [25, 39, 52],
+      "frame_incognito": [14, 21, 28],
+      "frame_incognito_inactive": [18, 27, 36],
+      "background_tab": [21, 32, 43],
+      "background_tab_inactive": [25, 39, 52],
+      "background_tab_incognito": [14, 21, 28],
+      "background_tab_incognito_inactive": [18, 27, 36],
+      "tab_text": [231, 233, 234],
+      "tab_background_text": [139, 152, 165],
+      "tab_background_text_inactive": [139, 152, 165],
+      "tab_background_text_incognito": [139, 152, 165],
+      "tab_background_text_incognito_inactive": [139, 152, 165],
+      "toolbar": [34, 48, 60],
+      "toolbar_text": [231, 233, 234],
+      "toolbar_button_icon": [139, 152, 165],
+      "button_background": [34, 48, 60],
+      "bookmark_text": [231, 233, 234],
+      "omnibox_background": [21, 32, 43],
+      "omnibox_text": [231, 233, 234],
+      "ntp_background": [21, 32, 43],
+      "ntp_text": [231, 233, 234],
+      "ntp_link": [29, 155, 240],
+      "ntp_header": [25, 39, 52]
+    }
+  }
+}

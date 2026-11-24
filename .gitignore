@@ -1,0 +1,21 @@
+# 生成物
+*.zip
+
+# Chrome が unpacked テーマ読み込み時にフォルダー直下へ作るキャッシュ
+Cached Theme.pak
+
+# secret の混入防止
+.env
+.env.*
+secrets.json
+secrets.local.json
+credentials.json
+*.pem
+*.key
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+nul
