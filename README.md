@@ -31,6 +31,8 @@ Chrome のブラウザ UI（タブ、ツールバー、アドレスバー、新�
 | 補助文字・アイコン | `tab_background_text*` `toolbar_button_icon` | `#8B98A5` |
 | NTP のリンク | `ntp_link` | `#1D9BF0` |
 
+シークレット用の色は指定していますが、Chrome 158（unpacked 読み込み）での実測ではシークレット窓にテーマは適用されませんでした（既定の暗い色のまま）。
+
 ## ローカルで読み込む
 
 1. Chrome で `chrome://extensions` を開く。
@@ -46,6 +48,16 @@ Bun が必要です。依存パッケージはありません。
 ```
 bun --no-env-file scripts/check.ts   # manifest・色キー・コントラスト・アイコン実寸の検査
 bun --no-env-file scripts/pack.ts    # DimDarkBlue.zip（manifest.json・icons・LICENSE のみ）を作成
+```
+
+## ストア掲載画像
+
+`store/images/en/`（英語 UI）と `store/images/ja/`（日本語 UI）に、スクリーンショットを 3 枚ずつ（`screenshot-01.png` 新しいタブ、`screenshot-02.png` ローカルの固定ページ、`screenshot-03.png` 暗めのページとブックマークバー。いずれも 1280x800）、言語共通の小タイル `store/images/tile-small.png`（440x280）があります。実際の Chrome の窓にテーマを適用して撮っています（Windows のみ）。
+
+```
+bun --no-env-file scripts/screenshots.ts                # 英語・日本語を撮り直す（一時プロファイルの Chrome を使い、普段の Chrome には触れない）
+bun --no-env-file scripts/screenshots.ts --locale=ja    # 1 言語だけ撮る（en | ja。タイルは en のときだけ作り直す）
+bun --no-env-file scripts/screenshots.ts --verify       # 既存の画像（両言語）の寸法・アルファ・画素だけを検査する
 ```
 
 ## ライセンス

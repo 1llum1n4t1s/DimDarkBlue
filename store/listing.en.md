@@ -14,7 +14,6 @@ Dim Dark Blue gives Chrome's tabs, toolbar, address bar and New Tab page a calm 
 
 - A navy base that is softer than pure black, comfortable for long sessions
 - Text colors chosen for readability, with sufficient contrast on the main text and background pairs
-- Matching colors for Incognito windows
 - A colors-only theme: no images, no permissions, and no scripts
 
 You can reset the theme at any time from Chrome's Settings > Appearance.
