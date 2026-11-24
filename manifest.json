@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Dim Dark Blue",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "__MSG_appDescription__",
   "default_locale": "en",
   "icons": {
@@ -11,29 +11,29 @@
   },
   "theme": {
     "colors": {
-      "frame": [21, 32, 43],
-      "frame_inactive": [25, 39, 52],
-      "frame_incognito": [14, 21, 28],
-      "frame_incognito_inactive": [18, 27, 36],
-      "background_tab": [21, 32, 43],
-      "background_tab_inactive": [25, 39, 52],
-      "background_tab_incognito": [14, 21, 28],
-      "background_tab_incognito_inactive": [18, 27, 36],
+      "frame": [25, 33, 41],
+      "frame_inactive": [29, 38, 48],
+      "frame_incognito": [15, 21, 26],
+      "frame_incognito_inactive": [20, 27, 34],
+      "background_tab": [25, 33, 41],
+      "background_tab_inactive": [29, 38, 48],
+      "background_tab_incognito": [15, 21, 26],
+      "background_tab_incognito_inactive": [20, 27, 34],
       "tab_text": [231, 233, 234],
-      "tab_background_text": [139, 152, 165],
-      "tab_background_text_inactive": [139, 152, 165],
-      "tab_background_text_incognito": [139, 152, 165],
-      "tab_background_text_incognito_inactive": [139, 152, 165],
-      "toolbar": [21, 32, 43],
+      "tab_background_text": [142, 152, 162],
+      "tab_background_text_inactive": [142, 152, 162],
+      "tab_background_text_incognito": [142, 152, 162],
+      "tab_background_text_incognito_inactive": [142, 152, 162],
+      "toolbar": [49, 61, 73],
       "toolbar_text": [231, 233, 234],
-      "toolbar_button_icon": [139, 152, 165],
+      "toolbar_button_icon": [162, 171, 180],
       "bookmark_text": [231, 233, 234],
-      "omnibox_background": [21, 32, 43],
+      "omnibox_background": [25, 33, 41],
       "omnibox_text": [231, 233, 234],
-      "ntp_background": [21, 32, 43],
+      "ntp_background": [25, 33, 41],
       "ntp_text": [231, 233, 234],
-      "ntp_link": [29, 155, 240],
-      "ntp_header": [25, 39, 52]
+      "ntp_link": [58, 153, 219],
+      "ntp_header": [29, 38, 48]
     }
   }
 }
