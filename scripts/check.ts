@@ -1,12 +1,13 @@
 // manifest.json の検査。依存ゼロ。使い方: bun --no-env-file scripts/check.ts [manifest.jsonのパス]
 // 色キーの許可一覧は Chromium chrome/browser/themes/browser_theme_pack.cc の
 // kOverwritableColorTable（無効なキーは Chrome が無言で無視するため、ここで弾く）。
+// button_background は有効なキーだが、Windows の右上の3ボタンの背景に重なって枠と色がずれるため許可しない。
 import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 
 const ALLOWED_COLORS = new Set([
   "background_tab", "background_tab_inactive", "background_tab_incognito",
-  "background_tab_incognito_inactive", "bookmark_text", "button_background",
+  "background_tab_incognito_inactive", "bookmark_text",
   "frame", "frame_inactive", "frame_incognito", "frame_incognito_inactive",
   "ntp_background", "ntp_header", "ntp_link", "ntp_text",
   "omnibox_background", "omnibox_text",

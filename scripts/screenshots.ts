@@ -108,18 +108,21 @@ function runs(r: Raw, axis: "row" | "col", at: number, minLen = 6): string {
 
 // 各画像で「枠」「ツールバー」の色が既定色のままでないことを画素で確かめる（領域は撮影位置が固定なので固定値）
 type Check = { name: string; box: [number, number, number, number]; color: number[]; min: number };
-const FRAME = [0x15, 0x20, 0x2b], TOOLBAR = [0x22, 0x30, 0x3c];
+const FRAME = [0x15, 0x20, 0x2b], TOOLBAR = [0x15, 0x20, 0x2b];
 const checks: Record<string, Check[]> = {
   "screenshot-01.png": [
     { name: "枠(タブ列の空き)", box: [1100, 8, 1140, 28], color: FRAME, min: 0.95 },
+    { name: "右上の3ボタンの背景", box: [1145, 4, 1155, 28], color: FRAME, min: 1 },
     { name: "ツールバー(上端の帯)", box: [8, 42, 1270, 45], color: TOOLBAR, min: 0.95 },
   ],
   "screenshot-02.png": [
     { name: "枠(タブ列の空き)", box: [1100, 8, 1140, 28], color: FRAME, min: 0.95 },
+    { name: "右上の3ボタンの背景", box: [1145, 4, 1155, 28], color: FRAME, min: 1 },
     { name: "ツールバー(上端の帯)", box: [8, 42, 1270, 45], color: TOOLBAR, min: 0.95 },
   ],
   "screenshot-03.png": [
     { name: "枠(タブ列の空き)", box: [1100, 8, 1140, 28], color: FRAME, min: 0.95 },
+    { name: "右上の3ボタンの背景", box: [1145, 4, 1155, 28], color: FRAME, min: 1 },
     { name: "ツールバー(上端の帯)", box: [8, 42, 1270, 45], color: TOOLBAR, min: 0.95 },
     { name: "ブックマークバー(右の空き)", box: [1100, 92, 1270, 112], color: TOOLBAR, min: 0.95 },
   ],

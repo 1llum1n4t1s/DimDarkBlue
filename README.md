@@ -2,8 +2,6 @@
 
 Chrome のブラウザ UI（タブ、ツールバー、アドレスバー、新しいタブページ）を、落ち着いた濃紺 `#15202B` を基調に着せ替えるブラウザテーマです。画像を使わない色指定だけのテーマで、権限・スクリプトはありません。
 
-> 状態: 開発中。Chrome ウェブストアには未提出です。
-
 ## Twitter / X とは無関係です
 
 このテーマは Twitter / X 社とは無関係の非公式のものです。配色は、かつての Twitter の「Dim」配色に似た濃紺を参考にしていますが、同社の公式のものではなく、ロゴや画像も使っていません。
@@ -22,14 +20,17 @@ Chrome のブラウザ UI（タブ、ツールバー、アドレスバー、新�
 
 | 用途 | キー | 色 |
 |---|---|---|
-| ウィンドウ枠・背景タブ・アドレスバー・新しいタブ背景 | `frame` `background_tab` `omnibox_background` `ntp_background` | `#15202B` |
+| ウィンドウ枠・ツールバー（アクティブタブ）・背景タブ・新しいタブ背景 | `frame` `toolbar` `background_tab` `omnibox_background` `ntp_background` | `#15202B` |
 | 非アクティブ枠・非アクティブの背景タブ・NTP ヘッダー | `frame_inactive` `background_tab_inactive` `ntp_header` | `#192734` |
-| ツールバー（アクティブタブ）・ボタン背景 | `toolbar` `button_background` | `#22303C` |
 | シークレットの枠・背景タブ | `frame_incognito` `background_tab_incognito` | `#0E151C` |
 | シークレットの非アクティブ | `frame_incognito_inactive` `background_tab_incognito_inactive` | `#121B24` |
 | 文字 | `tab_text` `toolbar_text` `bookmark_text` `omnibox_text` `ntp_text` | `#E7E9EA` |
 | 補助文字・アイコン | `tab_background_text*` `toolbar_button_icon` | `#8B98A5` |
 | NTP のリンク | `ntp_link` | `#1D9BF0` |
+
+アドレスバーは `omnibox_background` に `#15202B` を指定していますが、Chrome 158 の実測では `#2A343E` で表示されます（ツールバーから自動で決まる色とみられます）。
+
+`toolbar` を `frame` と同じ色にしているのは、Brave のピン留めタブの枠線（直接は指定できず、`frame` と `toolbar` の明るさから決まる）を暗くするためです。
 
 シークレット用の色は指定していますが、Chrome 158（unpacked 読み込み）での実測ではシークレット窓にテーマは適用されませんでした（既定の暗い色のまま）。
 
