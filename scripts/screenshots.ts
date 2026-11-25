@@ -108,7 +108,7 @@ function runs(r: Raw, axis: "row" | "col", at: number, minLen = 6): string {
 
 // 各画像で「枠」「ツールバー」の色が既定色のままでないことを画素で確かめる（領域は撮影位置が固定なので固定値）
 type Check = { name: string; box: [number, number, number, number]; color: number[]; min: number };
-const FRAME = [0x19, 0x21, 0x29], TOOLBAR = [0x31, 0x3d, 0x49];
+const FRAME = [0x19, 0x21, 0x29], TOOLBAR = [0x42, 0x51, 0x62];
 const checks: Record<string, Check[]> = {
   "screenshot-01.png": [
     { name: "枠(タブ列の空き)", box: [1100, 8, 1140, 28], color: FRAME, min: 0.95 },

@@ -32,6 +32,14 @@ const PAIRS: [string, string][] = [
   ["ntp_text", "ntp_header"],
 ];
 const MIN_CONTRAST = 4.5;
+// 面どうしの組。toolbar 対 frame が 2.0 以上だと Brave のピン留めタブの枠線が消える（GetToolbarTopSeparatorColor）。
+const SURFACE_PAIRS: [string, string][] = [
+  ["toolbar", "frame"],
+  ["toolbar", "frame_inactive"],
+  ["toolbar", "frame_incognito"],
+  ["toolbar", "frame_incognito_inactive"],
+];
+const MIN_SURFACE_CONTRAST = 2.0;
 
 const errors: string[] = [];
 const manifestPath = resolve(process.argv[2] ?? join(import.meta.dir, "..", "manifest.json"));
@@ -73,6 +81,14 @@ for (const [fg, bg] of PAIRS) {
   const r = ratio(f, b);
   console.log(`${r >= MIN_CONTRAST ? "OK  " : "NG  "} ${r.toFixed(2).padStart(5)}  ${fg} on ${bg}`);
   if (r < MIN_CONTRAST) errors.push(`コントラスト不足 ${r.toFixed(2)}: ${fg} on ${bg}`);
+}
+
+for (const [a, c] of SURFACE_PAIRS) {
+  const x = rgb.get(a), y = rgb.get(c);
+  if (!x || !y) { errors.push(`コントラスト対象が未設定: ${a} / ${c}`); continue; }
+  const r = ratio(x, y);
+  console.log(`${r >= MIN_SURFACE_CONTRAST ? "OK  " : "NG  "} ${r.toFixed(2).padStart(5)}  ${a} on ${c} (面・2.0以上)`);
+  if (r < MIN_SURFACE_CONTRAST) errors.push(`面の明暗差不足 ${r.toFixed(2)}: ${a} on ${c}`);
 }
 
 // アイコン: 宣言サイズと PNG の IHDR の実寸が一致すること

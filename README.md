@@ -16,23 +16,24 @@ Chrome のブラウザ UI（タブ、ツールバー、アドレスバー、新�
 
 ## 配色
 
-正本は `manifest.json` の `theme.colors` です。文字色の組は 4.5 以上のコントラスト比を `scripts/check.ts` で検査しています。
+正本は `manifest.json` の `theme.colors` です。文字色の組は 4.5 以上、`toolbar` と各 `frame*` は 2.0 以上のコントラスト比を `scripts/check.ts` で検査しています。
 
 | 用途 | キー | 色 |
 |---|---|---|
 | ウィンドウ枠・背景タブ・新しいタブ背景 | `frame` `background_tab` `omnibox_background` `ntp_background` | `#192129` |
-| ツールバー（アクティブタブ） | `toolbar` | `#313D49` |
-| 非アクティブ枠・非アクティブの背景タブ・NTP ヘッダー | `frame_inactive` `background_tab_inactive` `ntp_header` | `#1D2630` |
+| ツールバー（アクティブタブ） | `toolbar` | `#425162` |
+| 非アクティブ枠・非アクティブの背景タブ | `frame_inactive` `background_tab_inactive` | `#192129` |
+| NTP ヘッダー | `ntp_header` | `#1D2630` |
 | シークレットの枠・背景タブ | `frame_incognito` `background_tab_incognito` | `#0F151A` |
 | シークレットの非アクティブ | `frame_incognito_inactive` `background_tab_incognito_inactive` | `#141B22` |
 | 文字 | `tab_text` `toolbar_text` `bookmark_text` `omnibox_text` `ntp_text` | `#E7E9EA` |
 | 補助文字 | `tab_background_text*` | `#8E98A2` |
-| ツールバーのアイコン | `toolbar_button_icon` | `#A2ABB4` |
+| ツールバーのアイコン | `toolbar_button_icon` | `#B9C2CB` |
 | NTP のリンク | `ntp_link` | `#3A99DB` |
 
-アドレスバーは `omnibox_background` に `#192129` を指定していますが、Chrome 158 の実測では `#262A30` で表示されます（ツールバーから自動で決まる色とみられます）。
+アドレスバーは `omnibox_background` に `#192129` を指定していますが、Chrome 158 の実測では `#363F4B` で表示されます（ツールバーから自動で決まる色とみられます）。ツールバー `#425162` よりやや暗く、見分けられます。
 
-`toolbar` を `frame` より明るくし、Chrome の既定のテーマと同じくらいの明暗差（コントラスト比 約1.5）でアクティブなタブを区別しています。その代わり、Brave のピン留めタブの枠線（直接は指定できず、`frame` と `toolbar` の明るさから決まる）は明るくなります。
+`toolbar` を `frame` より明るくし、コントラスト比 2.0 以上の明暗差でアクティブなタブを区別しています。Brave のピン留めタブの枠線（直接は指定できず、`frame` と `toolbar` の明るさから決まる）は、比が 2.0 以上なので表示されません。
 
 シークレット用の色は指定していますが、Chrome 158（unpacked 読み込み）での実測ではシークレット窓にテーマは適用されませんでした（既定の暗い色のまま）。
 
