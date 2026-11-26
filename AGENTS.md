@@ -1,9 +1,9 @@
 # Dim Dark Blue（Chrome ブラウザテーマ）
 
 - 配色の正本は `manifest.json` の `theme.colors`。色キーは Chromium `chrome/browser/themes/browser_theme_pack.cc` の `kOverwritableColorTable` にあるものだけ（無効キーは Chrome が無言で無視する）。配色表は README.md にも書いているので、変更時は両方を揃える。
-- `toolbar` は `frame`・`frame_inactive` より明るくし、アクティブなタブを区別する。コントラスト比は 2.0 以上に保つ（現在 約2.0。`check.ts` が検査する）。Brave のピン留めタブの枠線は両者の明るさから自動で決まり（GetToolbarTopSeparatorColor）、比が 2.0 以上だと消える。`frame_inactive` は `frame` と同色にして非アクティブでも比を保つ。`toolbar_button_icon` は toolbar 上で 4.5 以上の最小限の明るさ。
+- `toolbar` は `frame`・`frame_inactive` より明るくし、アクティブなタブを区別する。コントラスト比は 1.2 以上に保つ（現在 約1.27。`check.ts` が検査する）。Brave のピン留めタブの枠線は両者の明るさから自動で決まり（GetToolbarTopSeparatorColor）、比が 2.0 未満なので表示される（ツールバーを暗くするため許容）。`frame_inactive` は `frame` と同色にして非アクティブでも比を保つ。`toolbar_button_icon` は toolbar 上で 4.5 以上を保つ。
 - `button_background` は使わない（Windows の右上の3ボタンの背景に重なり、枠 `frame` と色がずれる）。
-- 検証: `bun --no-env-file scripts/check.ts`（概要文言・許可キー・RGB 範囲・文字コントラスト 4.5 以上・アイコン実寸）。
+- 検証: `bun --no-env-file scripts/check.ts`（概要文言・許可キー・RGB 範囲・文字コントラスト 4.5 以上・面の明暗差 1.2 以上・permissions など権限キー（`permissions`・`host_permissions`・`content_scripts`・`background`・`action`）と `theme` の `colors` 以外を使わないこと・アイコン実寸）。
 - パッケージ: `bun --no-env-file scripts/pack.ts` で `DimDarkBlue.zip`（manifest.json・_locales・icons・LICENSE のみ）。名前は manifest に直書き、概要は `_locales/{en,ja}` に置く（ストアの掲載情報を日英に分けるため）。ZIP は git に入れない。
 - 版（`manifest.json` の `version`）は通常作業で上げない。上げるのは `/vava` の依頼時だけ。
 - ストア用の配信 CI は未導入（CWS の item ID は取得済みの `lphfgjgniogopplcnngbdfidmflajegh`）。掲載文の下書きは `store/`。掲載画像は `store/images/`（`en/` と `ja/` に `screenshot-01〜03.png`＝1280x800・アルファなし、言語共通の `tile-small.png`＝440x280）。
