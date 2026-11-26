@@ -9,6 +9,8 @@
 // 仕組み: 一時プロファイルの Chrome（画面あり・1280x800）に、一時置き場へコピーしたテーマを
 // CDP の Extensions.loadUnpacked（--remote-debugging-pipe）で読み込み、その窓だけを
 // PrintWindow(PW_RENDERFULLCONTENT) で撮る。デスクトップ全体は撮らない。普段の Chrome には触れない。
+// 画素の照合が NG の画像は最大 3 回撮り直す。撮った画像は一時フォルダーの out\ へ書き、すべて成功した言語の分だけ
+// store/images/ へコピーする（照合 NG・失敗のときは store/images/ を更新しない）。
 // 一時フォルダーはスクリプトが消さない（最後に出力される。Prunlet CLI で片付ける）。
 import { dlopen, FFIType, JSCallback, ptr, toArrayBuffer, type Pointer } from "bun:ffi";
 import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
@@ -106,9 +108,16 @@ function runs(r: Raw, axis: "row" | "col", at: number, minLen = 6): string {
   return out.join(" ");
 }
 
-// 各画像で「枠」「ツールバー」の色が既定色のままでないことを画素で確かめる（領域は撮影位置が固定なので固定値）
+// 各画像の「枠」「ツールバー」が manifest.json の theme.colors の色であることを画素で確かめる（領域は撮影位置が固定なので固定値）
 type Check = { name: string; box: [number, number, number, number]; color: number[]; min: number };
-const FRAME = [0x19, 0x21, 0x29], TOOLBAR = [0x42, 0x51, 0x62];
+const themeColors = JSON.parse(readFileSync(join(root, "manifest.json"), "utf8")).theme?.colors;
+function themeColor(key: "frame" | "toolbar"): number[] {
+  const v = themeColors?.[key];
+  if (!Array.isArray(v) || v.length !== 3 || v.some((n) => !Number.isInteger(n) || n < 0 || n > 255))
+    throw new Error(`manifest.json の theme.colors.${key} が RGB（0〜255 の整数 3 個）でない`);
+  return v;
+}
+const FRAME = themeColor("frame"), TOOLBAR = themeColor("toolbar");
 const checks: Record<string, Check[]> = {
   "screenshot-01.png": [
     { name: "枠(タブ列の空き)", box: [1100, 8, 1140, 28], color: FRAME, min: 0.95 },
@@ -440,8 +449,8 @@ if (!localeArg) {
 
 // ---- 実行 ----
 const work = mkdtempSync(join(tmpdir(), "ddb-shot-"));
-const extDir = join(work, "ext"), profDir = join(work, "profile");
-mkdirSync(join(extDir, "icons"), { recursive: true }); mkdirSync(profDir, { recursive: true }); mkdirSync(outDir, { recursive: true });
+const extDir = join(work, "ext"), profDir = join(work, "profile"), shotDir = join(work, "out");
+mkdirSync(join(extDir, "icons"), { recursive: true }); mkdirSync(profDir, { recursive: true }); mkdirSync(shotDir, { recursive: true });
 copyFileSync(join(root, "manifest.json"), join(extDir, "manifest.json"));
 for (const l of readdirSync(join(root, "_locales"))) {
   mkdirSync(join(extDir, "_locales", l), { recursive: true });
@@ -514,11 +523,11 @@ try {
     const shot = await cdp.send("Page.captureScreenshot", { format: "png", fromSurface: true }, sessionId);
     const d = decodePng(Buffer.from(shot.data, "base64"));
     if (d.w !== 440 || d.h !== 280) throw new Error(`タイルの寸法が ${d.w}x${d.h}`);
-    writeFileSync(join(imagesRoot, "tile-small.png"), encodePng({ w: d.w, h: d.h, rgb: d.rgb }));
+    writeFileSync(join(shotDir, "tile-small.png"), encodePng({ w: d.w, h: d.h, rgb: d.rgb }));
     await cdp.send("Target.closeTarget", { targetId });
     await cdp.send("Target.disposeBrowserContext", { browserContextId });
     const cr = tileSubtitleContrast({ w: d.w, h: d.h, rgb: d.rgb });
-    console.log(`tile-small.png を作成（副題のコントラスト比 ${cr.toFixed(2)}）`);
+    console.log(`tile-small.png を撮影（副題のコントラスト比 ${cr.toFixed(2)} ${cr < 4.5 ? "NG" : "OK"}）`);
     if (cr < 4.5) failed = true;
   }
 
@@ -546,13 +555,23 @@ try {
     foreground(win);
     await Bun.sleep(3500);
     foreground(win);
-    const raw = capture(win);
-    const png = encodePng(raw);
-    writeFileSync(join(outDir, file), png);
-    const r = inspect(file, png);
-    console.log(r.lines.join("\n"));
-    console.log(`  行 y=10: ${runs(raw, "row", 10)}\n  行 y=60: ${runs(raw, "row", 60)}\n  列 x=20: ${runs(raw, "col", 20)}\n  行 y=0: ${runs(raw, "row", 0, 1).slice(0, 200)}\n  列 x=0: ${runs(raw, "col", 0, 1).slice(0, 200)}`);
-    if (!r.ok) failed = true;
+    const RETRIES = 3;
+    for (let retry = 0; ; retry++) {
+      const raw = capture(win);
+      const png = encodePng(raw);
+      const r = inspect(file, png);
+      if (!r.ok && retry < RETRIES) {
+        console.log([r.lines[0], ...r.lines.filter((l) => l.startsWith("  NG ")), `  再撮影 ${retry + 1}/${RETRIES}`].join("\n"));
+        await Bun.sleep(1500);
+        foreground(win);
+        continue;
+      }
+      writeFileSync(join(shotDir, file), png);
+      console.log(r.lines.join("\n"));
+      console.log(`  行 y=10: ${runs(raw, "row", 10)}\n  行 y=60: ${runs(raw, "row", 60)}\n  列 x=20: ${runs(raw, "col", 20)}\n  行 y=0: ${runs(raw, "row", 0, 1).slice(0, 200)}\n  列 x=0: ${runs(raw, "col", 0, 1).slice(0, 200)}`);
+      if (!r.ok) failed = true;
+      break;
+    }
   };
   await shoot("screenshot-01.png", mainWin, ntp.targetId);
   {
@@ -598,6 +617,21 @@ try {
   await Bun.sleep(1500);
   Bun.spawnSync(["taskkill", "/PID", String(pid), "/T", "/F"], { stdout: "ignore", stderr: "ignore" }); // 自分が起動したプロセス木だけ
   server.stop(true);
+  // すべて成功したときだけ、今回撮った画像を store/images へ反映する
+  if (failed) console.log(`store/images は更新していない。今回の撮影出力: ${shotDir}`);
+  else {
+    const copied: string[] = [];
+    try {
+      mkdirSync(outDir, { recursive: true });
+      const targets: [string, string][] = ["screenshot-01.png", "screenshot-02.png", "screenshot-03.png"].map((f) => [f, join(outDir, f)]);
+      if (locale === "en") targets.push(["tile-small.png", join(imagesRoot, "tile-small.png")]);
+      for (const [f, to] of targets) { copyFileSync(join(shotDir, f), to); copied.push(to); }
+      console.log(`store/images へ反映: ${copied.join(", ")}`);
+    } catch (e) {
+      failed = true;
+      console.error(`反映に失敗: ${e}\n  反映済み: ${copied.join(", ") || "なし"}\n  今回の撮影出力: ${shotDir}`);
+    }
+  }
   console.log(`一時フォルダー（要片付け）: ${work}`);
   process.exit(failed ? 1 : 0);
 }

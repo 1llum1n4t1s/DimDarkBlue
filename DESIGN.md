@@ -23,7 +23,7 @@ Chrome のブラウザ UI（タブ、ツールバー、アドレスバー、新�
 - 実行時: Chrome が `theme.colors` を読み、UI の色に反映する。このテーマ自身のコードは動かない。
 - 検査: `check.ts` が manifest の項目、概要文言、色キー、RGB、コントラスト比（文字色は 4.5 以上、ツールバーと枠は 2.0 以上）、アイコンの実寸を調べ、問題があれば終了コード 1 で終わる。
 - 配布: `pack.ts` が manifest・LICENSE・`_locales/`・`icons/` を ZIP にまとめる。検査は呼ばないため、別に実行する。
-- 掲載画像: `screenshots.ts` がテーマのコピーを一時プロファイルの Chrome に CDP で読み込み、その窓だけを撮って `store/images/` へ書き出す。操作と制約の詳細は [AGENTS.md](AGENTS.md) を参照。
+- 掲載画像: `screenshots.ts` がテーマのコピーを一時プロファイルの Chrome に CDP で読み込み、その窓だけを撮って `store/images/` へ書き出す。画素の照合が NG の画像は撮り直し、最後まで NG のときや撮影が失敗したときは `store/images/` を更新しない。操作と制約の詳細は [AGENTS.md](AGENTS.md) を参照。
 
 ## 不変条件
 
